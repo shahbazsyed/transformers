@@ -206,13 +206,24 @@ def main():
         model_args.tokenizer_name if model_args.tokenizer_name else model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
     )
+    # add custom tokens
+    special_tokens_list = ["<|TOPIC|>", "<|ARGUMENT|>", "<|CONCLUSION|>"]
+    special_tokens_dict = {'additional_special_tokens':special_tokens_list}
+    num_added_tokens = tokenizer.add_special_tokens(special_tokens_dict)
+    logger.info("Added {} new tokens".format(num_added_tokens))
+    logger.info(tokenizer.special_tokens_map)
+
+
     model = AutoModelForSeq2SeqLM.from_pretrained(
         model_args.model_name_or_path,
         from_tf=".ckpt" in model_args.model_name_or_path,
         config=config,
         cache_dir=model_args.cache_dir,
     )
-
+    
+    # resize the model embeddings to include the new to kens
+    model.resize_token_embeddings(len(tokenizer))
+    
     # use task specific params
     use_task_specific_params(model, data_args.task)
 
