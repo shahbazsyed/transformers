@@ -207,7 +207,8 @@ def main():
         cache_dir=model_args.cache_dir,
     )
     # add custom tokens
-    special_tokens_list = ["<|TOPIC|>", "<|ARGUMENT|>","<|ASPECTS|>", "<|CONCLUSION|>"]
+    #special_tokens_list = ["<|TOPIC|>", "<|ARGUMENT|>","<|ASPECTS|>", "<|CONCLUSION|>"]
+    special_tokens_list = ["<|THESIS|>", "<|TITLE|>","<|SUMMARY|>"]
     special_tokens_dict = {'additional_special_tokens':special_tokens_list}
     num_added_tokens = tokenizer.add_special_tokens(special_tokens_dict)
     logger.info("Added {} new tokens".format(num_added_tokens))
